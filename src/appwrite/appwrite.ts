@@ -4,6 +4,9 @@ const client = new Client();
 
 const endpoint = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT;
 const projectId = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID;
+// console.log(endpoint);
+// console.log(projectId);
+
 
 client
    .setEndpoint(endpoint!)
