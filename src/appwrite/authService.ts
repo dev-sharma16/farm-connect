@@ -1,3 +1,4 @@
+import { Query } from "appwrite";
 import { appwrite } from "./appwrite";
 
 export const authService = {
@@ -27,7 +28,7 @@ export const authService = {
                         role: role,  
                       }
                     );
-                    return true;
+                    return user;
                 }
             } else{
                 return false;
@@ -38,11 +39,32 @@ export const authService = {
         }
     },
 
-        async login(email: string, password: string){
+    async login(email: string, password: string){
         try{
-          return appwrite.account.createEmailPasswordSession(email,password)
+          const session  = await appwrite.account.createEmailPasswordSession(email,password);
+
+          const user = await appwrite.account.get();
+          const userId = user.$id  
+
+          const databaseID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID;
+          const userRoleCollectionID = process.env.NEXT_PUBLIC_APPWRITE_USER_ROLE_COLLECTION_ID  
+
+          const result = await appwrite.databases.listDocuments(
+              databaseID!,
+              userRoleCollectionID!,
+              [Query.equal("userId",userId)]!
+            );
+          
+          const userRole = result.documents[0]?.role;
+          console.log(userRole);
+          if (!userRole) {
+              throw new Error("User role not found");
+          }
+          
+          return { user, userRole };
+           
         } catch (error : any) {
-            console.log("Error in  :" ,error);
+            console.log("Error in login :" ,error);
         }
     },
 
