@@ -3,7 +3,7 @@ import { appwrite } from "./appwrite";
 
 export const authService = {
     
-    async createAccount(email: string, password: string, name: string,  role: string){
+    async createAccount(email: string, password: string, name: string,  userRole: string){
         try {
           const user = await appwrite.account.create(appwrite.ID.unique(), email, password, name);
 
@@ -16,8 +16,8 @@ export const authService = {
                     const databaseID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID;
                     const userRoleCollectionID = process.env.NEXT_PUBLIC_APPWRITE_USER_ROLE_COLLECTION_ID;
           
-                    console.log(databaseID);
-                    console.log(userRoleCollectionID);  
+                    // console.log(databaseID);
+                    // console.log(userRoleCollectionID);  
 
                     await appwrite.databases.createDocument(
                       databaseID!,
@@ -25,10 +25,10 @@ export const authService = {
                       appwrite.ID.unique(),
                       {
                         userId: currentUser.$id,
-                        role: role,  
+                        role: userRole,  
                       }
                     );
-                    return user;
+                    return {user, userRole};
                 }
             } else{
                 return false;
