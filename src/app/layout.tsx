@@ -23,8 +23,8 @@ export default function RootLayout({children}: Readonly<{children: React.ReactNo
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-         <Navbar/>
         <AppProvider>
+         <Navbar/>
           {children}
         </AppProvider>
       </body>
