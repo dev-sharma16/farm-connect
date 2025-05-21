@@ -46,33 +46,35 @@ export default function LoginPage (){
   }
    
   return(
-    <div className="max-w-md mx-auto mt-10">
-      <h1 className="text-2xl font-bold mb-4">Login</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
+    <div className="h-screen w-full flex items-center justify-center bg-[#f8fff2] px-4">
+      <div className="w-full max-w-md bg-white shadow-lg rounded-xl p-8">
+        <h1 className="text-3xl font-semibold text-green-900 mb-6 text-center">Login</h1>
 
-        <Input
-          label="Email"
-          type="email"
-          placeholder="Enter email"
-          {...register('email', { required: 'Email is required' })}
-          error={errors.email?.message}
-        />
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <Input
+            label="Email"
+            type="email"
+            placeholder="Enter email"
+            {...register("email", { required: "Email is required" })}
+            error={errors.email?.message}
+          />
 
-        <Input
-          label="Password"
-          type="password"
-          placeholder="Enter password"
-          {...register('password', { required: 'Password is required' })}
-          error={errors.password?.message}
-        />
+          <Input
+            label="Password"
+            type="password"
+            placeholder="Enter password"
+            {...register("password", { required: "Password is required" })}
+            error={errors.password?.message}
+          />
 
-        <button
-          type="submit"
-          className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          {loading ? "Loging Account..." : "Login"}
-        </button>
-      </form>
+          <button
+            type="submit"
+            className="w-full bg-green-900 text-white font-semibold py-2 rounded hover:bg-green-800 transition"
+          >
+            {loading ? "Logging in..." : "Login"}
+          </button>
+        </form>
+      </div>
     </div>
   )
 }

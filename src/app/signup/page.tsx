@@ -45,52 +45,55 @@ export default function SignUpPage (){
       }
   }
   return (
-    <div className="max-w-md mx-auto mt-10">
-      <h1 className="text-2xl font-bold mb-4">Sign Up</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
-
-        <Input
-          label="Email"
-          type="email"
-          placeholder="Enter email"
-          {...register('email', { required: 'Email is required' })}
-          error={errors.email?.message}
-        />
-
-        <Input
-          label="Password"
-          type="password"
-          placeholder="Enter password"
-          {...register('password', { required: 'Password is required' })}
-          error={errors.password?.message}
-        />
+    <div className="min-h-screen bg-[#f8fff2] flex items-center justify-center px-4">
+      <div className="max-w-md w-full bg-white shadow-md rounded-xl p-8 border border-green-200">
+        <h1 className="text-3xl font-bold text-green-900 mb-6 text-center">Sign Up</h1>
         
-        <Input
-          label="Name"
-          type="text"
-          placeholder="Enter name"
-          {...register('name', { required: 'Name is required' })}
-          error={errors.name?.message}
-        />
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 
-        <Select
-          label="Who you are"
-          options={[
-            { value: "", label: "Choose your role", disabled: true },
-            { value: "farmer", label: "Farmer" },
-            { value: "consumer", label: "Consumer" },
-          ]}
-          {...register('userRole', { required: 'Role selection is required' })}
-          error={errors.userRole?.message}
-        />
-        
-        <button
-          type="submit"
-          className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-         {loading ? "Creating Account..." : "Sign Up"}
-        </button>
-      </form>
+          <Input
+            label="Email"
+            type="email"
+            placeholder="Enter email"
+            {...register('email', { required: 'Email is required' })}
+            error={errors.email?.message}
+          />
+
+          <Input
+            label="Password"
+            type="password"
+            placeholder="Enter password"
+            {...register('password', { required: 'Password is required' })}
+            error={errors.password?.message}
+          />
+
+          <Input
+            label="Name"
+            type="text"
+            placeholder="Enter name"
+            {...register('name', { required: 'Name is required' })}
+            error={errors.name?.message}
+          />
+
+          <Select
+            label="Who you are"
+            options={[
+              { value: "", label: "Choose your role", disabled: true },
+              { value: "farmer", label: "Farmer" },
+              { value: "consumer", label: "Consumer" },
+            ]}
+            {...register('userRole', { required: 'Role selection is required' })}
+            error={errors.userRole?.message}
+          />
+
+          <button
+            type="submit"
+            className="w-full bg-green-900 text-white font-semibold py-2 px-4 rounded hover:bg-green-800 transition-colors"
+          >
+            {loading ? "Creating Account..." : "Sign Up"}
+          </button>
+        </form>
+      </div>
     </div>
   )
 }
