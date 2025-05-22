@@ -28,7 +28,7 @@ export default function Navbar(){
         return(
             <>
               <Link href={`/dashboard-${userRole}`} className={styles.tabs}>Dashboard</Link>
-              <Link href="/add-item" className={styles.tabs}>Add Item</Link>
+              <Link href="/add-crop" className={styles.tabs}>Add Item</Link>
               <Link href="/orders" className={styles.tabs}>Orders</Link>
               <button onClick={handleLogout} className={styles.tabs}>Logout</button>
             </>   
