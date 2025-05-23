@@ -4,11 +4,9 @@ import { useForm } from "react-hook-form";
 import Input from "@/components/Input";
 import { authService } from "@/appwrite/authService";
 import { crudService } from "@/appwrite/crudService";
-import { useDispatch, UseDispatch } from "react-redux";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";  //TODO: implemt redirection on the dashboard page after succesful post 
 import { ChangeEvent, useEffect, useState } from "react";
 import {STATES_AND_CITIES} from "@/constants/locationData"
-import { error } from "console";
 
 type FormData = {
   name: string,
@@ -24,27 +22,29 @@ export default function addCrop(){
         register,
         handleSubmit,
         reset,
+        setValue,
+        watch,
         formState: {errors}
     } = useForm<FormData>()
     
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
-    const [loading, setloading] = useState(false)
+    const [loading, setloading] = useState(false);
+    const [availableCities, setAvailableCities] = useState<string[]>([]);
+    
+    const selectedState = watch("state");
 
-    // useEffect(()=>{
-    //     const getUser = async ()=>{
-    //         const user  = await authService.getCurrentUser();
-    //         if (user) {
-    //             setUserId(user.$id)
-    //         } 
-    //     };
-    //     getUser();
-    // },[]);
+    useEffect(()=>{
+        if (selectedState) {
+            const stateData  = STATES_AND_CITIES.find((item)=> item.state === selectedState); //TODO: why filter is not used ..?
 
-    // const handleInputChanges = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>)=>{
-    //     const {name, value} = e.target;
-    //     setFormData(prev=>({...prev,[name]: value}));
-    // };
+            if (stateData) {
+               setAvailableCities(stateData.cities)    
+               setValue("city", "");
+            }
+        }
+
+    },[selectedState, setValue])
 
     const handleImageChange = (e: ChangeEvent<HTMLInputElement>) =>{
         const file = e.target.files?.[0];
@@ -57,7 +57,8 @@ export default function addCrop(){
     
     const onSubmit = async (data: FormData) => {
         try {
-            
+            setloading(true);
+
             if (!imageFile) {
                 alert("Please upload an image..!");
                 return ;
@@ -86,16 +87,18 @@ export default function addCrop(){
 
             if (createdCrop) {
                 alert("Crop posted succefully..!")
+                reset();
+                setImageFile(null);
+                setImagePreview(null);
             }else {
                 alert("Posting failed..!")
             }
 
-            reset();
-            setImageFile(null);
-            setImagePreview(null);
             
         } catch (error: any) {
             console.log("Error in creating the post : ",error );
+        } finally{
+            setloading(false);
         }
     }
 
@@ -123,9 +126,44 @@ export default function addCrop(){
                   error={errors.name?.message}
                 />
 
-                {/* <Input>TODO: add select field for state</Input> */}
+                {/* State selection */}
+                <div className="mb-4">
+                    <label className="block mb-1 font-medium">State</label>
+                    <select 
+                       {...register("state",{required: "Please select the State"})}
+                       className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-blue-500"
+                    >
+                        <option value="">Select State</option>
+                        {STATES_AND_CITIES.map((item)=>(
+                            <option key={item.state} value={item.state}>{item.state}</option>
+                        ))};
+                    </select>
+                    {errors.state && 
+                       <p className="text-red-500 text-sm mt-1">{errors.state.message}</p>
+                    }
+                </div>
 
-                {/* <Input>TODO: add select field for cities based on the state</Input> */}
+                {/* City Selection */}
+                <div className="mb-4">
+                    <label className="block mb-1 font-medium">City</label>
+                    <select 
+                      {...register("city", {required : "Please select the city"})}
+                      disabled={!selectedState || availableCities.length === 0}
+                      className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                    >
+                      <option value="">
+                          {!selectedState ? "First select a state" : "Select City"}
+                      </option>
+                      {availableCities.map((city)=>(
+                        <option key={city} value={city}>
+                            {city}
+                        </option>
+                      ))};
+                    </select>
+                    {errors.city && 
+                      <p className="text-red-500 text-sm mt-1">{errors.city.message}</p>
+                    }
+                </div>
 
                 {/* Image Upload */}
                 <div className="mb-4">
@@ -144,9 +182,8 @@ export default function addCrop(){
                    type="submit" 
                    className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
                 > 
-                   Add Crop
+                   {loading ? "Posting.." : "Add Crop"}
                 </button>
-
             </form>
         </div>
     )
