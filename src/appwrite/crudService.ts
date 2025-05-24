@@ -1,5 +1,6 @@
 import { appwrite } from './appwrite'
 import { Query } from 'appwrite';
+// import { CropPost } from "@/app/dashboard-farmer/page"
 
 const Db_Id = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID;
 const Collection_Crop_Id = process.env.NEXT_PUBLIC_APPWRITE_CROPS_COLLECTION_ID;
@@ -30,14 +31,32 @@ export const crudService = {
         }
     },
 
-    async getCrops(userId? : string){
+    async getCropsByUser(userId? : string){
         try {
+
             const queries = userId ? [Query.equal('userId', userId)] : [];
-            return appwrite.databases.listDocuments(Db_Id!, Collection_Crop_Id!, queries)
+
+            const cropsData = await appwrite.databases.listDocuments(Db_Id!, Collection_Crop_Id!, queries)
+
+            const cropWithImageUrl = await Promise.all(
+                cropsData.documents.map(async (crop:any)=>(
+                    {
+                        ...crop,
+                        imageUrl: appwrite.storage.getFileView(Bucket_Id!,crop.imageId).href
+                    }
+                ))
+            );
+            
+            return cropWithImageUrl
+
         } catch (error: any) {
             console.log("Error in getting the crop post : ",error);
+            return[];
         }
     },
+
+    // TODO: implement funtion for all post loading for consumer on homepage
+    async getCrops(){},
 
     async deleteCrops(cropId: string){
         try {
