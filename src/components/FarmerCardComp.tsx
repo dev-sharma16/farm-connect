@@ -21,7 +21,15 @@ export default function FarmerCard({
         <div className="bg-white rounded-2xl shadow-md w-[300px] p-4 flex flex-col items-center gap-4">
           <div className="w-full h-[180px] bg-gray-300 rounded-xl overflow-hidden flex justify-center items-center">
             {image ? (
-                <Image
+                // <Image
+                //    src={image}
+                //    alt={name}
+                //    width={300}
+                //    height={180}
+                //    className="object-cover w-full h-full"
+                // />
+
+                <img
                    src={image}
                    alt={name}
                    width={300}
