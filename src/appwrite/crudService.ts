@@ -1,5 +1,6 @@
 import { appwrite } from './appwrite'
 import { Query } from 'appwrite';
+import { authService } from './authService';
 // import { CropPost } from "@/app/dashboard-farmer/page"
 
 const Db_Id = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID;
@@ -31,6 +32,9 @@ export const crudService = {
         }
     },
 
+    // TODO: implement funtion for all post loading for consumer on homepage
+    async getCrops(){},
+
     async getCropsByUser(userId? : string){
         try {
 
@@ -54,14 +58,28 @@ export const crudService = {
             return[];
         }
     },
+    
+    async getCropById(postId: string){
+        try {
+            const post = await appwrite.databases.getDocument(Db_Id!,Collection_Crop_Id!,postId);
 
-    // TODO: implement funtion for all post loading for consumer on homepage
-    async getCrops(){},
+            const postImageUrl = appwrite.storage.getFileView(Bucket_Id!,post.imageId).href;
 
+            return{
+                ...post,
+                postImageUrl
+            }
+        } catch (error:any) {
+            console.log("Error in fetching the post : ",error);
+            return null;
+        }
+    },
     
     async updateCrop(cropId: string, newData: any){
         try {
-            return appwrite.databases.updateDocument(Db_Id!, Collection_Crop_Id!, cropId, newData)
+            const updatedPost = await appwrite.databases.updateDocument(Db_Id!, Collection_Crop_Id!, cropId, newData)
+
+            return updatedPost;
         } catch (error: any) {
             console.log("Error in getting the crop post : ",error);
         }
