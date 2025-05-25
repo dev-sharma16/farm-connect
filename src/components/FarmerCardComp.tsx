@@ -5,8 +5,10 @@ type FarmerCardProps = {
   name: string;          
   price: number | string;
   availability: number | string;
-  onEdit: () => void;
-  onDelete: () => void;
+  postId: string;
+  imageId: string; 
+  onEdit:(postId: string,imageId: string) => void;
+  onDelete:(postId: string,imageId: string) => void;
 };
 
 export default function FarmerCard({
@@ -14,6 +16,8 @@ export default function FarmerCard({
   name,
   price,
   availability,
+  postId,
+  imageId,
   onEdit,
   onDelete,
 }: FarmerCardProps) {
@@ -54,13 +58,13 @@ export default function FarmerCard({
     
           <div className="flex gap-4 mt-2">
             <button
-              onClick={onEdit}
+              onClick={() => onEdit(postId,imageId)}
               className="bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-lg"
             >
               Edit Post
             </button>
             <button
-              onClick={onDelete}
+              onClick={() => onDelete(postId, imageId)}
               className="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg"
             >
               Delete
