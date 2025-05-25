@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import Input from "@/components/Input";
 import { authService } from "@/appwrite/authService";
 import { crudService } from "@/appwrite/crudService";
-import { useRouter } from "next/navigation";  //TODO: implemt redirection on the dashboard page after succesful post 
+import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
 import {STATES_AND_CITIES} from "@/constants/locationData"
 
@@ -54,7 +54,7 @@ export default function addCrop(){
         }
     };
 
-    
+    const router = useRouter();
     const onSubmit = async (data: FormData) => {
         try {
             setloading(true);
@@ -86,10 +86,16 @@ export default function addCrop(){
             });
 
             if (createdCrop) {
-                alert("Crop posted succefully..!")
+                const confirmed = window.confirm("Crop has been uploaded! Click OK to go to dashbord.")
+
                 reset();
                 setImageFile(null);
                 setImagePreview(null);
+
+                if (confirmed) {
+                  router.push("/dashboard-farmer");
+                }
+
             }else {
                 alert("Posting failed..!")
             }
