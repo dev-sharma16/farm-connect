@@ -58,13 +58,6 @@ export const crudService = {
     // TODO: implement funtion for all post loading for consumer on homepage
     async getCrops(){},
 
-    async deleteCrops(cropId: string){
-        try {
-            return appwrite.databases.deleteDocument(Db_Id!, Collection_Crop_Id!,cropId)
-        } catch (error: any) {
-            console.log("Error in getting the crop post : ",error);
-        }
-    },
     
     async updateCrop(cropId: string, newData: any){
         try {
@@ -73,7 +66,15 @@ export const crudService = {
             console.log("Error in getting the crop post : ",error);
         }
     },
-
+    
+    async deleteCrops(cropId: string){
+        try {
+            return appwrite.databases.deleteDocument(Db_Id!, Collection_Crop_Id!,cropId)
+        } catch (error: any) {
+            console.log("Error in getting the crop post : ",error);
+        }
+    },
+    
     async deleteCropImage(cropImageId: string){
         try {
             return appwrite.storage.deleteFile(Bucket_Id!, cropImageId)
