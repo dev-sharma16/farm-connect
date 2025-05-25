@@ -4,6 +4,7 @@ import FarmerCard from "@/components/FarmerCardComp";
 import { authService } from "@/appwrite/authService";
 import { crudService } from "@/appwrite/crudService";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 // import { appwrite } from "@/appwrite/appwrite";
 // import { Query } from "appwrite";
 // import { appwrite } from "@/appwrite/appwrite";
@@ -26,6 +27,7 @@ export default function dashboardFarmer(){
     const [posts, setPosts] = useState([]);
     const [userId, setUserId] = useState('');
     const [loading, setLoading] = useState(true);
+    const router = useRouter();
 
     useEffect(()=>{
         const fetchCrops = async () => {
@@ -52,9 +54,10 @@ export default function dashboardFarmer(){
 
     },[])
 
-    const handleEdit = () => {
-        // TODO: implement a edit post function
-      console.log("Edit clicked");
+    const handleEdit = async (postId: string , imageId: string) => {
+
+        router.push(`/edit-crop?postId=${postId}`);
+    
     };
     
     const handleDelete = async (postId: string, imageId: string) => {
@@ -68,12 +71,9 @@ export default function dashboardFarmer(){
                 alert("Post is deleted..!")
             }
         } catch (error:any) {
-            console.log("Error in deleting the post : ",error);
-            
+            console.log("Error in deleting the post : ",error);        
         }
         
-        
-      console.log("Delete clicked");
     };
 
     if (loading) {
