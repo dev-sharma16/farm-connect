@@ -57,8 +57,22 @@ export default function dashboardFarmer(){
       console.log("Edit clicked");
     };
     
-    const handleDelete = () => {
-        // TODO: implement a delete function
+    const handleDelete = async (postId: string, imageId: string) => {
+
+        try {
+            const deletePost = await crudService.deleteCrops(postId);
+            const deletePostImg = await crudService.deleteCropImage(imageId);
+
+            if(deletePost && deletePostImg){
+                setPosts(prev => prev.filter(post => post.$id !== postId))
+                alert("Post is deleted..!")
+            }
+        } catch (error:any) {
+            console.log("Error in deleting the post : ",error);
+            
+        }
+        
+        
       console.log("Delete clicked");
     };
 
@@ -69,20 +83,20 @@ export default function dashboardFarmer(){
             </div>
         );
     }
-
-
     
     return(
-        <div className="h-screen w-full flex items-center justify-center bg-[#f8fff2] px-4 gap-5.5">
+        <div className="h-screen w-full flex items-center justify-center bg-[#f8fff2] px-4 gap-5.5 flex-wrap">
             {posts.map((post)=>(
                 <FarmerCard
                   key={post.$id}    
                   image={post.imageUrl}   
-                  name={post.name}    
+                  name={post.name}   
                   price={post.price}    
                   availability={post.availability}
-                  onEdit={handleEdit}
-                  onDelete={handleDelete}
+                  postId={post.$id}
+                  imageId={post.imageId}
+                  onEdit={(postId,imageId) => handleEdit(postId, imageId)}
+                  onDelete={(postId,imageId) => handleDelete(postId,imageId)}
                 />
             ))}
         </div>
