@@ -6,11 +6,15 @@ type CropCardProps = {
   price?: number; // optional, can be undefined or null
   sellerName: string;
   imageUrl: string;
+  onClick: ()=> void;
 };
 
-const ConsumerCardComp: React.FC<CropCardProps> = ({ name, price, sellerName, imageUrl }) => {
+const ConsumerCardComp: React.FC<CropCardProps> = ({ name, price, sellerName, imageUrl, onClick }) => {
   return (
-    <div className="flex max-w-md w-full bg-white rounded-3xl shadow-md overflow-hidden p-4 gap-4 items-center">
+    <div 
+      className="flex max-w-md w-full bg-white rounded-3xl shadow-md overflow-hidden p-4 gap-4 items-center mt-1 cursor-pointer"
+      onClick={onClick}
+    >
       {/* Crop Image */}
       <div className="w-36 h-36 bg-gray-200 rounded-xl overflow-hidden flex-shrink-0">
         {/* <Image
@@ -31,12 +35,12 @@ const ConsumerCardComp: React.FC<CropCardProps> = ({ name, price, sellerName, im
       </div>
 
       {/* Info Section */}
-      <div className="flex flex-col justify-between flex-1 h-full">
+      <div className="flex flex-col  flex-1 h-full justify-evenly">
         <h2 className="text-xl font-semibold text-black truncate">{name}</h2>
         <p className="text-lg text-gray-800 mt-1">
           ₹ {price ? price : "--"} <span className="text-sm text-gray-600">(kg)</span>
         </p>
-        <p className="text-sm text-gray-600 mt-2 truncate">sold by {sellerName}</p>
+        <p className="text-sm text-gray-600 mt-2 truncate">listed by {sellerName}</p>
       </div>
     </div>
   );
