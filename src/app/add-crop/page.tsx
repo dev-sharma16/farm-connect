@@ -66,6 +66,7 @@ export default function addCrop(){
             
             const user = await authService.getCurrentUser();
             const userId = user?.$id;
+            const userName = user?.name;
             
             const uploadImage = await crudService.uploadCropImage(imageFile);
             const imageId = uploadImage?.$id;
@@ -81,6 +82,7 @@ export default function addCrop(){
                 price: Number(data.price),
                 imageId: imageId!,
                 userId: userId!,
+                userName: userName!,
                 state: data.state,
                 city: data.city
             });

@@ -92,6 +92,7 @@ export default function editCrop(){
 
        const user = await authService.getCurrentUser();
        const crntUserId = user?.$id; 
+       const crntUserName = user?.name;
        
        let imageId = post.imageId;
 
@@ -114,6 +115,7 @@ export default function editCrop(){
             city: data.city,
             imageId: imageId,
             userId: crntUserId,
+            userName: crntUserName,
         })
 
         if(updatedPost){
