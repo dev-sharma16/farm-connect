@@ -32,8 +32,26 @@ export const crudService = {
         }
     },
 
-    // TODO: implement funtion for all post loading for consumer on homepage
-    async getCrops(){},
+    async getCrops(){
+        try {
+
+            const postData = await appwrite.databases.listDocuments(Db_Id!,Collection_Crop_Id!);
+
+            const postWithImageUrl = await Promise.all(
+                postData.documents.map(async (crop:any)=>(
+                   {
+                    ...crop,
+                    imageUrl: appwrite.storage.getFileView(Bucket_Id!, crop.imageId).href
+                   }
+                ))
+            );
+
+            return postWithImageUrl;
+                
+        } catch (error:any) {
+            console.log("Error in getting the crop posts : ",error);
+        }
+    },
 
     async getCropsByUser(userId? : string){
         try {
@@ -101,4 +119,4 @@ export const crudService = {
         } 
     }
 
-}
+};
