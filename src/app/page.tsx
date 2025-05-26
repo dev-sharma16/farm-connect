@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="min-h-screen px-8 pb-20 sm:px-20 grid place-items-center bg-[#F8FFF2]  font-[family-name:var(--font-geist-sans)]">
+    <div className="min-h-screen px-8 pb-20 sm:px-20 grid place-items-center bg-[#b0dcb9]  font-[family-name:var(--font-geist-sans)]">
       <div className="text-center max-w-xl space-y-6">
         <h1 className="text-4xl sm:text-5xl font-bold text-[#113A18]">
           Welcome to FarmConnect

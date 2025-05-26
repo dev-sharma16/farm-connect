@@ -46,7 +46,7 @@ export default function LoginPage (){
   }
    
   return(
-    <div className="h-screen w-full flex items-center justify-center bg-[#f8fff2] px-4">
+    <div className="h-screen w-full flex items-center justify-center bg-[#b0dcb9] px-4">
       <div className="w-full max-w-md bg-white shadow-lg rounded-xl p-8">
         <h1 className="text-3xl font-semibold text-green-900 mb-6 text-center">Login</h1>
 

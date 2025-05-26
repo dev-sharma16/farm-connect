@@ -85,7 +85,7 @@ export default function dashboardFarmer(){
     }
     
     return(
-        <div className="h-screen w-full flex items-center justify-center bg-[#f8fff2] px-4 gap-5.5 flex-wrap">
+        <div className="h-screen w-full flex items-center justify-center bg-[#b0dcb9] px-4 gap-5.5 flex-wrap">
             {posts.map((post)=>(
                 <FarmerCard
                   key={post.$id}    
