@@ -11,27 +11,41 @@ export default function dashboardConsumer(){
     const [loading, setLoading] = useState(false);
     const [posts, setPosts] = useState([]);
 
-    // TODO: add a click function on posts when user click on the post it redirects to the details page 
+    const [searchQuery, setSearchQuery] = useState("");
+    const [filteredPost, setFilterdCrops] = useState([]);
+
     const router = useRouter();
 
     useEffect(()=>{
-        const fetchPosts = async () => {
-            try {
-                setLoading(true);
-                const postData = await crudService.getCrops();
-                if (postData) {
-                    setPosts(postData);
-                }
-            } catch (error:any) {
-                console.log("Error in loading the Posts : ", error);
-            } finally{
-                setLoading(false);
+      const fetchPosts = async () => {
+        try {
+            setLoading(true);
+            const postData = await crudService.getCrops();
+            if (postData) {
+                setPosts(postData);
             }
-        };
+        } catch (error:any) {
+            console.log("Error in loading the Posts : ", error);
+        } finally{
+            setLoading(false);
+        }
+      };
 
-        fetchPosts();
+      fetchPosts();
 
     },[])
+
+    useEffect(()=>{
+      if(!searchQuery){
+        setFilterdCrops(posts);
+        return;
+      }
+
+      const filterPost = posts.filter(post => post.name.toLowerCase().includes(searchQuery.toLowerCase()));
+
+      setFilterdCrops(filterPost);
+      
+    },[searchQuery,posts])
 
     if (loading) {
         return (
@@ -40,15 +54,16 @@ export default function dashboardConsumer(){
             </div>
         );
     }
-// mt-18
+
     return(
-        <div className="min-h-[calc(100vh-64px)] w-full bg-[#b0dcb9] flex items-start py-20 ">
+        <div className="min-h-[calc(100vh-64px)] w-full bg-[#b0dcb9] flex items-start py-20 ">{/*mt-18*/}
             {/* Left Sidebar - Filters */}
             <div className="w-[20%] bg-white p-4 border-r border-gray-200 flex flex-col gap-4 h-70 ml-5 mt-5 rounded-3xl shadow-md ">
               <input
                 type="text"
                 placeholder="Search for crop"
                 className="border p-2 rounded-2xl text-sm"
+                onChange={(e)=> setSearchQuery(e.target.value)}
               />
               <div className="font-semibold">Filter</div>
               <input
@@ -69,7 +84,7 @@ export default function dashboardConsumer(){
             {/* Middle Section - Cards */}
             <div className="w-[60%] p-4 overflow-y-auto h-screen space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {posts.map((post) => (
+                {filteredPost.map((post) => (
                   <ConsumerCardComp
                     key={post.$id}
                     imageUrl={post.imageUrl}
