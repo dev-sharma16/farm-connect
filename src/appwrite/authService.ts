@@ -3,7 +3,7 @@ import { appwrite } from "./appwrite";
 
 export const authService = {
     
-    async createAccount(email: string, password: string, name: string,  userRole: string){
+    async createAccount(email: string, password: string, name: string,  userRole: string, phoneNumber: string){
         try {
           const user = await appwrite.account.create(appwrite.ID.unique(), email, password, name);
 
@@ -25,7 +25,8 @@ export const authService = {
                       appwrite.ID.unique(),
                       {
                         userId: currentUser.$id,
-                        role: userRole,  
+                        role: userRole,
+                        phoneNumber: phoneNumber,
                       }
                     );
                     return {user, userRole};
@@ -89,9 +90,11 @@ export const authService = {
             [Query.equal("userId", user.$id)]
            )
            
-           const userRole = response.documents[0]?.role || "guest";
+           const userDocument = response.documents[0];
+           const userRole = userDocument?.role || "guest";
+           const userPhoneNumber = userDocument?.phoneNumber || "not entered"
 
-           return {user, userRole};
+           return {user, userRole, userPhoneNumber};
 
         } catch (error: any) {
             console.log("Error in loading the user :", error);
