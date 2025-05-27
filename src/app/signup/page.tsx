@@ -11,6 +11,7 @@ import { setUsers } from "@/redux/authSlice";
 
 type FormData = {
   email: string,
+  phoneNumber:  string,
   password: string,
   name: string,
   userRole: string
@@ -31,7 +32,7 @@ export default function SignUpPage (){
       try {
         console.log('Form submitted:', data);
         setLoading(true);
-        const crtAcc = await authService.createAccount(data.email,data.password,data.name,data.userRole);
+        const crtAcc = await authService.createAccount(data.email,data.password,data.name,data.userRole,data.phoneNumber);
         
         if (crtAcc) {
           const { user, userRole } = crtAcc;
@@ -58,6 +59,15 @@ export default function SignUpPage (){
             {...register('email', { required: 'Email is required' })}
             error={errors.email?.message}
           />
+
+          <Input
+            label="Phone-no"
+            type="phoneNumber"
+            placeholder="Enter phone number"
+            {...register('phoneNumber', { required: 'Phone number is required' })}
+            error={errors.phoneNumber?.message}
+          />
+
 
           <Input
             label="Password"
