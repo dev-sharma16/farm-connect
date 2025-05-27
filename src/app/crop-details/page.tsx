@@ -1,5 +1,5 @@
 "use client";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { crudService } from "@/appwrite/crudService";
 
@@ -8,6 +8,8 @@ export default function CropDetailPage() {
   const postId = searchParams.get("postId");
 
   const [post, setPost] = useState(null);
+
+  const router = useRouter();
 
   useEffect(() => {
     const fetchPostDetails = async () => {
@@ -62,7 +64,7 @@ export default function CropDetailPage() {
                 {/* Dummy Contact Button */}
                 <button
                   className="bg-green-700 hover:bg-green-800 text-white py-3 rounded-xl text-center text-lg font-medium transition-all duration-200"
-                  onClick={() => alert("Contact Farmer feature coming soon!")}
+                  onClick={()=> router.push(`/contact-farmer?postId=${post.$id}`)}
                 >
                   Contact Farmer
                 </button>
