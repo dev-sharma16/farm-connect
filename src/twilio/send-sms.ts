@@ -1,9 +1,23 @@
 import client from "@/twilio/twilio";
 
-export const sendSms = async ({to, body})=>{
-   return await client.messages.create({
-      body,
-      from: process.env.NEXT_PUBLIC_TWILIO_PHONE_NUMBER,
-      to,
-   });
+interface SendSmsParams {
+   to: string;
+   body: string;
+}
+
+export const sendSms = async ({to, body}: SendSmsParams)=>{
+   try {
+
+      const message = await client.messages.create({
+        body,
+        from: process.env.TWILIO_PHONE_NUMBER,
+        to,
+      });
+      
+      return message;
+
+   } catch (error: any) {
+      console.error('Error sending SMS:', error);
+      throw error;
+   }
 };
