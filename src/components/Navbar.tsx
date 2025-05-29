@@ -29,7 +29,7 @@ export default function Navbar(){
             <>
               <Link href={`/dashboard-${userRole}`} className={styles.tabs}>Dashboard</Link>
               <Link href="/add-crop" className={styles.tabs}>Add Item</Link>
-              <Link href="/orders" className={styles.tabs}>Orders</Link>
+              <Link href="/request-farmer" className={styles.tabs}>Queries</Link>
               <button onClick={handleLogout} className={styles.tabs}>Logout</button>
             </>   
         )
@@ -38,7 +38,7 @@ export default function Navbar(){
           return(
             <>
              <Link href={`/dashboard-${userRole}`} className={styles.tabs}>Home</Link>
-              <Link href="/search" className={styles.tabs}>Search</Link>
+              <Link href="/request-consumer" className={styles.tabs}>Your Request</Link>
               <Link href="/profile" className={styles.tabs}>Profile</Link>
               <button onClick={handleLogout} className={styles.tabs}>Logout</button>
             </>

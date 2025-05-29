@@ -5,7 +5,7 @@ import Input from "@/components/Input";
 import { STATES_AND_CITIES } from "@/constants/locationData";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { appwrite } from "@/appwrite/appwrite";
 import { Query } from "appwrite";
 
@@ -41,6 +41,8 @@ export default function contactFarmer(){
     const postId = searchParams.get("postId");
 
     const selectedState = watch("state");
+
+    const router = useRouter(); 
 
     useEffect(()=>{
       if (selectedState) {
@@ -107,6 +109,7 @@ export default function contactFarmer(){
           if (response.ok){
             alert("Request sent successfully..!, wait for farmer response");
             reset();
+            router.push("/dashboard-consumer");
           }else{
             alert(`Failed to submit request..!, try again later ${result.message}`);
           }
