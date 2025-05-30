@@ -9,7 +9,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { appwrite } from "@/appwrite/appwrite";
 import { Query } from "appwrite";
 
-
 type FormData = {
   name: string,
   phoneNumber: string,
@@ -37,6 +36,9 @@ export default function contactFarmer(){
       farmerPhoneNumber: string,
     } | null>(null);
 
+    const [farmerId, setFarmerId] = useState("");
+    const [user, setUser] = useState("");
+
     const searchParams = useSearchParams();
     const postId = searchParams.get("postId");
 
@@ -61,6 +63,8 @@ export default function contactFarmer(){
         const post  = await crudService.getCropById(postId!);
         const {name: cropName, userName: farmerName, userId} = post;
 
+        setFarmerId(userId);
+
         const farmerDetailsRes = await appwrite.databases.listDocuments(
           process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
           process.env.NEXT_PUBLIC_APPWRITE_USER_ROLE_COLLECTION_ID!,
@@ -74,9 +78,15 @@ export default function contactFarmer(){
           farmerName,
           farmerPhoneNumber: phoneNumber,
         })
+
+        const crrntUser = await appwrite.account.get();
+        if(crrntUser){
+          setUser(crrntUser.$id);
+        }
       }
 
       fetchPostAndFarmerDetails();
+
     },[])
 
     const onSubmit = async (data: FormData) => {
@@ -94,6 +104,29 @@ export default function contactFarmer(){
           farmerName: farmerDetails.farmerName,
           farmerPhone: farmerDetails.farmerPhoneNumber,
           location: `${data.city}, ${data.state}`,
+        }
+
+        if(payload){
+          const databaseID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID;
+          const requestsCollectionID= process.env.NEXT_PUBLIC_APPWRITE_REQUESTS_COLLECTION_ID;
+          
+          try {
+            await appwrite.databases.createDocument(
+              databaseID!,
+              requestsCollectionID!,
+              appwrite.ID.unique(),
+              {
+                farmerId: farmerId,
+                postId: postId,
+                customerId: user,
+                status: "pending",
+                quantity: data.quantity,
+                location: `${data.city}, ${data.state}`,
+              }
+            )
+          } catch (error:any) {
+            console.log("Error in saving the request : ",error);
+          }
         }
 
         try{
