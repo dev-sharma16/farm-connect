@@ -6,6 +6,7 @@ import { authService } from './authService';
 const Db_Id = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID;
 const Collection_Crop_Id = process.env.NEXT_PUBLIC_APPWRITE_CROPS_COLLECTION_ID;
 const Bucket_Id = process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID;
+const Requests_Is = process.env.NEXT_PUBLIC_APPWRITE_REQUESTS_COLLECTION_ID;
 
 export const crudService = {
     async uploadCropImage(file: File){
@@ -117,6 +118,19 @@ export const crudService = {
         } catch (error: any) {
             console.log("Error in getting the crop post : ",error);
         } 
-    }
+    },
+
+    async getRequestsByUser(userId?: string){
+      try {
+          const querie = userId?[Query.equal("customerId",userId)]:[];
+
+           const response = await appwrite.databases.listDocuments(Db_Id!,Requests_Is!,querie);
+           return response;
+
+        } catch (error: any) {
+          console.log("Error in listing the requests : ",error);
+           return { documents: [], total: 0 };
+        } 
+    },
 
 };
