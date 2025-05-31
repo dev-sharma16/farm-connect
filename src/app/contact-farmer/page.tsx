@@ -108,7 +108,12 @@ export default function contactFarmer(){
 
         if(payload){
           const databaseID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID;
-          const requestsCollectionID= process.env.NEXT_PUBLIC_APPWRITE_REQUESTS_COLLECTION_ID;
+          const requestsCollectionID= process.env.NEXT_PUBLIC_APPWRITE_REQUESTS_COLLECTION_ID; 
+          const bucketID = process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID;
+
+          const post = await crudService.getCropById(postId!)
+
+          const imageUrl = post?.postImageUrl;
           
           try {
             await appwrite.databases.createDocument(
@@ -117,8 +122,11 @@ export default function contactFarmer(){
               appwrite.ID.unique(),
               {
                 farmerId: farmerId,
+                farmerName: farmerDetails.farmerName,
                 postId: postId,
                 customerId: user,
+                imageUrl: imageUrl,
+                cropName: farmerDetails.cropName,
                 status: "pending",
                 quantity: data.quantity,
                 location: `${data.city}, ${data.state}`,
@@ -130,22 +138,23 @@ export default function contactFarmer(){
         }
 
         try{
-          const response = await fetch("./api/send-sms",{
-            method: 'POST',
-            headers: {
-              "Content-Type" : "application/json"
-            },
-            body:JSON.stringify(payload),
-          });
+          // TODO: tempriarly disabled the message service for testing
+          // const response = await fetch("./api/send-sms",{
+          //   method: 'POST',
+          //   headers: {
+          //     "Content-Type" : "application/json"
+          //   },
+          //   body:JSON.stringify(payload),
+          // });
 
-          const result  = await response.json();
-          if (response.ok){
-            alert("Request sent successfully..!, wait for farmer response");
-            reset();
-            router.push("/dashboard-consumer");
-          }else{
-            alert(`Failed to submit request..!, try again later ${result.message}`);
-          }
+          // const result  = await response.json();
+          // if (response.ok){
+          //   alert("Request sent successfully..!, wait for farmer response");
+          //   reset();
+          //   router.push("/dashboard-consumer");
+          // }else{
+          //   alert(`Failed to submit request..!, try again later ${result.message}`);
+          // }
         }catch(error: any){
           console.error("Error sending SMS:", error);
           alert("Something went wrong!");
