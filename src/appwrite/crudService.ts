@@ -6,7 +6,7 @@ import { authService } from './authService';
 const Db_Id = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID;
 const Collection_Crop_Id = process.env.NEXT_PUBLIC_APPWRITE_CROPS_COLLECTION_ID;
 const Bucket_Id = process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID;
-const Requests_Is = process.env.NEXT_PUBLIC_APPWRITE_REQUESTS_COLLECTION_ID;
+const Requests_Id = process.env.NEXT_PUBLIC_APPWRITE_REQUESTS_COLLECTION_ID;
 
 export const crudService = {
     async uploadCropImage(file: File){
@@ -124,7 +124,7 @@ export const crudService = {
       try {
           const querie = userId?[Query.or([Query.equal("customerId",userId), Query.equal("farmerId",userId)])]:[];
 
-           const response = await appwrite.databases.listDocuments(Db_Id!,Requests_Is!,querie);
+           const response = await appwrite.databases.listDocuments(Db_Id!,Requests_Id!,querie);
            return response;
 
         } catch (error: any) {
@@ -133,9 +133,19 @@ export const crudService = {
         } 
     },
 
+    async getRequestById(requestId: string){
+       try {
+         return await appwrite.databases.getDocument(Db_Id!,Requests_Id!,requestId)
+         
+       } catch (error: any) {
+         console.log("Error in getting the request : ",error);
+         
+       }
+    },
+
     async deleteRequest(requestId: string){
         try {
-            return appwrite.databases.deleteDocument(Db_Id!,Requests_Is!,requestId);
+            return appwrite.databases.deleteDocument(Db_Id!,Requests_Id!,requestId);
             
         } catch (error: any) {
             console.log("Error in deleting the request : ",error);
