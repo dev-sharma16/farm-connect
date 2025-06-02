@@ -4,7 +4,7 @@ interface FarmerRequestCardProps {
   cropName: string;
   imageUrl: string;
   quantity: number;
-  status: "pending" | "completed" | "not_completed";
+  status: "pending" | "completed" | "not-completed";
   onStatusChange: (newStatus: string) => void;
   onDelete: () => void;
 }
@@ -15,7 +15,7 @@ const getStatusStyles = (status: string) => {
       return "bg-yellow-200 text-yellow-800";
     case "completed":
       return "bg-green-200 text-green-800";
-    case "not_completed":
+    case "not-completed":
       return "bg-red-200 text-red-800";
     default:
       return "";
@@ -30,15 +30,15 @@ const FarmerReqCard: React.FC<FarmerRequestCardProps> = ({
   onStatusChange,
   onDelete,
 }) => {
+
   const [selectedStatus, setSelectedStatus] = useState(status);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const isStatusFinalized = status === "completed" || status === "not-completed";
 
   const handleSubmit = () => {
     if (selectedStatus !== status) {
       const confirmed = confirm("Are you sure you want to change the status?");
       if (confirmed) {
         onStatusChange(selectedStatus);
-        setIsSubmitted(true);
       }
     }
   };
@@ -53,7 +53,7 @@ const FarmerReqCard: React.FC<FarmerRequestCardProps> = ({
         {status.replace("_", " ")}
       </span>
 
-      {!isSubmitted ? (
+      {!isStatusFinalized ? (
         <div className="mt-4">
           <select
             value={selectedStatus}
@@ -62,7 +62,7 @@ const FarmerReqCard: React.FC<FarmerRequestCardProps> = ({
           >
             <option value="pending">Pending</option>
             <option value="completed">Completed</option>
-            <option value="not_completed">Not Completed</option>
+            <option value="not-completed">Not Completed</option>
           </select>
 
           {selectedStatus !== status && (

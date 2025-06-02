@@ -122,7 +122,7 @@ export const crudService = {
 
     async getRequestsByUser(userId?: string){
       try {
-          const querie = userId?[Query.equal("customerId",userId)]:[];
+          const querie = userId?[Query.or([Query.equal("customerId",userId), Query.equal("farmerId",userId)])]:[];
 
            const response = await appwrite.databases.listDocuments(Db_Id!,Requests_Is!,querie);
            return response;
@@ -132,5 +132,15 @@ export const crudService = {
            return { documents: [], total: 0 };
         } 
     },
+
+    async deleteRequest(requestId: string){
+        try {
+            return appwrite.databases.deleteDocument(Db_Id!,Requests_Is!,requestId);
+            
+        } catch (error: any) {
+            console.log("Error in deleting the request : ",error);
+            
+        }
+    }
 
 };
