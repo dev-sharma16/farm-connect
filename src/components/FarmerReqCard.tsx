@@ -5,8 +5,9 @@ interface FarmerRequestCardProps {
   imageUrl: string;
   quantity: number;
   status: "pending" | "completed" | "not-completed";
-  onStatusChange: (newStatus: string) => void;
+  // onStatusChange: (newStatus: string) => void;
   onDelete: () => void;
+  onSubmitStatus?: (newStatus: string) => void;
 }
 
 const getStatusStyles = (status: string) => {
@@ -22,25 +23,52 @@ const getStatusStyles = (status: string) => {
   }
 };
 
+const getStatusDisplayText = (status: string) => {
+  switch (status) {
+    case "not-completed":
+      return "Not Completed";
+    case "completed":
+      return "Completed";
+    case "pending":
+      return "Pending";
+    default:
+      return status;
+  }
+};
+
 const FarmerReqCard: React.FC<FarmerRequestCardProps> = ({
   cropName,
   imageUrl,
   quantity,
   status,
-  onStatusChange,
+  // onStatusChange,
   onDelete,
+  onSubmitStatus
 }) => {
 
   const [selectedStatus, setSelectedStatus] = useState(status);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const isStatusFinalized = status === "completed" || status === "not-completed";
 
-  const handleSubmit = () => {
-    if (selectedStatus !== status) {
-      const confirmed = confirm("Are you sure you want to change the status?");
+  const handleSubmit = async () => {
+    if (selectedStatus !== status && !isSubmitting) {
+      const confirmed = confirm(`Are you sure you want to change the status  from "${getStatusDisplayText(status)}" to "${getStatusDisplayText(selectedStatus)}`);
       if (confirmed) {
-        onStatusChange(selectedStatus);
+        setIsSubmitting(true);
+        try {
+          await onSubmitStatus(selectedStatus);
+        } catch (error) {
+          console.error("Error updating status:", error);
+          setSelectedStatus(status);
+        } finally {
+          setIsSubmitting(false);
+        }
       }
     }
+  };
+
+  const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedStatus(e.target.value);
   };
 
   return (
@@ -50,15 +78,17 @@ const FarmerReqCard: React.FC<FarmerRequestCardProps> = ({
       <p className="text-gray-700">Quantity: {quantity} kg</p>
 
       <span className={`inline-block px-3 py-1 mt-2 text-sm font-medium rounded-full ${getStatusStyles(status)}`}>
-        {status.replace("_", " ")}
+        {getStatusDisplayText(status)}
       </span>
 
       {!isStatusFinalized ? (
         <div className="mt-4">
           <select
+            id="status-select"
             value={selectedStatus}
-            onChange={(e) => setSelectedStatus(e.target.value)}
-            className="p-2 border rounded"
+            onChange={handleStatusChange}
+            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            disabled={isSubmitting}
           >
             <option value="pending">Pending</option>
             <option value="completed">Completed</option>
@@ -68,9 +98,14 @@ const FarmerReqCard: React.FC<FarmerRequestCardProps> = ({
           {selectedStatus !== status && (
             <button
               onClick={handleSubmit}
-              className="ml-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              disabled={isSubmitting}
+              className={`w-full px-4 py-2 text-white rounded-md transition-colors ${
+                isSubmitting 
+                  ? 'bg-gray-400 cursor-not-allowed' 
+                  : 'bg-blue-500 hover:bg-blue-600'
+              }`}
             >
-              Submit
+              {isSubmitting ? 'Updating...' : 'Update Status'}
             </button>
           )}
         </div>
