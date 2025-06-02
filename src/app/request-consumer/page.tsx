@@ -33,6 +33,22 @@ export default function requestConsumer(){
 
         fetchRequest();
     },[])    
+
+    const handleDelete = async (requestId: string) => {
+        try {
+            const isConfirmed = window.confirm("Are sure you want to delete the request..!");
+            if (isConfirmed) {
+                await crudService.deleteRequest(requestId);
+                setRequests(prevRequests => 
+                    prevRequests.filter(request => request.$id !== requestId)
+                );
+                alert("Request is deleted..!");
+            }
+        } catch (error: any) {
+            console.log("Error in deleting the request : ",error);
+            alert("Error in deleting the request, try again later");
+        }
+    }
     
     if (loading) {
         return (
@@ -60,6 +76,7 @@ export default function requestConsumer(){
                   quantity={request.quantity}
                   farmerName={request.farmerName}
                   status={request.status}
+                  onDelete={()=> handleDelete(request.$id)}
                 ></ConsumerReqCard>
 
             ))}
