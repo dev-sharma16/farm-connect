@@ -130,6 +130,8 @@ export default function contactFarmer(){
                 status: "pending",
                 quantity: data.quantity,
                 location: `${data.city}, ${data.state}`,
+                consumerPhoneNumber: `+91${data.phoneNumber}`,
+                consumerName: data.name,
               }
             )
           } catch (error:any) {
