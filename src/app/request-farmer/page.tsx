@@ -32,33 +32,70 @@ export default function requestFarmer(){
 
         fetchQueries();
     },[])
-    
-    const updateRequestStatus = async(requestId: any, newStatus: any)=>{
+
+    const handleStatusSubmit = async (request: any, newStatus: string)=>{
         try {
+
             const updateRequest = await appwrite.databases.updateDocument(
                 process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
                 process.env.NEXT_PUBLIC_APPWRITE_REQUESTS_COLLECTION_ID!,
-                requestId,
+                request.$id,
                 {status: newStatus},
             );
             if(updateRequest){
                 alert("Request status is updated..!");
                 setRequests(prevRequests => 
-                    prevRequests.map(request => 
-                       request.$id === requestId 
-                         ? {...request, status: newStatus}
-                         : request 
+                    prevRequests.map(req => 
+                       req.$id === request.$id
+                         ? {...req, status: newStatus}
+                         : req
                     )
                 )
-            }
             
-        } catch (error:any) {
-            console.log("Error in updating status : ",error);
-            alert("Failed to update request status..!");    
-        }
-    }
+                const clickedRequest = await crudService.getRequestById(request.$id);
+                if (clickedRequest) {
+                    const payload = {
+                        consumerName: clickedRequest.consumerName,
+                        consumerPhoneNumber: clickedRequest.consumerPhoneNumber,
+                        cropName: clickedRequest.cropName,
+                        quantity: clickedRequest.quantity,
+                        status: newStatus,
+                        farmerName: clickedRequest.farmerName,  
+                    }
+                
+                    try {
 
-    //  TODO: add amessge service for consumer when a farmer chnage the state therir two different messages for "completed" or "not completed"
+                        const response = await fetch("/api/send-sms-consumer", {
+                            method: 'POST',
+                            headers: {
+                                "Content-Type" : "application/json"
+                            },
+                            body: JSON.stringify(payload),
+                        });
+                    
+                        const result = await response.json();
+                        if(response.ok){
+                            console.log("Status updated and SMS sent successfully");
+                            alert("Request status updated and customer notified!");
+                        }else{
+                            console.error("SMS sending failed:", result);
+                            alert("Status updated but failed to notify customer via SMS");
+                        }
+                    
+                    } catch (error: any) {
+                        console.log("Error in sending payload to route : ", error);
+
+                    }
+                } else {
+                    alert("Status updated but failed to get request details for SMS");
+                }
+            }    
+
+        } catch (error: any) {
+            console.error("Error in updating status:", error);
+            alert("Failed to update request status!");
+        }
+    };
     
     const handleDelete = async (requestId: string) => {
         try {
@@ -84,6 +121,14 @@ export default function requestFarmer(){
         );
     }
 
+    if (requests.length === 0) {
+        return (
+            <div className="min-h-[calc(100vh-64px)] w-full bg-[#b0dcb9] flex items-center justify-center">
+                <div className="text-lg text-gray-600">No requests found</div>
+            </div>
+        );
+    }
+
     return(
         <div className="min-h-[calc(100vh-64px)] w-full bg-[#b0dcb9] flex items-start py-20">
             {requests.map((request, index)=>(
@@ -93,8 +138,9 @@ export default function requestFarmer(){
                   imageUrl={request.imageUrl}
                   quantity={request.quantity}
                   status={request.status}
-                  onStatusChange={(newStatus)=> updateRequestStatus(request.$id, newStatus)}
+                //   onStatusChange={(newStatus)=> updateRequestStatus(request.$id, newStatus)}
                   onDelete={()=>handleDelete(request.$id)}
+                  onSubmitStatus={(newStatus)=>handleStatusSubmit(request, newStatus)}
                 ></FarmerReqCard>
             ))}
         </div>
