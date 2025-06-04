@@ -62,30 +62,30 @@ export default function requestFarmer(){
                         status: newStatus,
                         farmerName: clickedRequest.farmerName,  
                     }
-                
-                    try {
+                // TODO: temperarily disabled the messaging service for testing purpose
+                    // try {
 
-                        const response = await fetch("/api/send-sms-consumer", {
-                            method: 'POST',
-                            headers: {
-                                "Content-Type" : "application/json"
-                            },
-                            body: JSON.stringify(payload),
-                        });
+                    //     const response = await fetch("/api/send-sms-consumer", {
+                    //         method: 'POST',
+                    //         headers: {
+                    //             "Content-Type" : "application/json"
+                    //         },
+                    //         body: JSON.stringify(payload),
+                    //     });
                     
-                        const result = await response.json();
-                        if(response.ok){
-                            console.log("Status updated and SMS sent successfully");
-                            alert("Request status updated and customer notified!");
-                        }else{
-                            console.error("SMS sending failed:", result);
-                            alert("Status updated but failed to notify customer via SMS");
-                        }
+                    //     const result = await response.json();
+                    //     if(response.ok){
+                    //         console.log("Status updated and SMS sent successfully");
+                    //         alert("Request status updated and customer notified!");
+                    //     }else{
+                    //         console.error("SMS sending failed:", result);
+                    //         alert("Status updated but failed to notify customer via SMS");
+                    //     }
                     
-                    } catch (error: any) {
-                        console.log("Error in sending payload to route : ", error);
+                    // } catch (error: any) {
+                    //     console.log("Error in sending payload to route : ", error);
 
-                    }
+                    // }
                 } else {
                     alert("Status updated but failed to get request details for SMS");
                 }
@@ -130,19 +130,21 @@ export default function requestFarmer(){
     }
 
     return(
-        <div className="min-h-[calc(100vh-64px)] w-full bg-[#b0dcb9] flex items-start py-20">
-            {requests.map((request, index)=>(
-                <FarmerReqCard
-                  key={request.$id || index}
-                  cropName={request.cropName}
-                  imageUrl={request.imageUrl}
-                  quantity={request.quantity}
-                  status={request.status}
-                //   onStatusChange={(newStatus)=> updateRequestStatus(request.$id, newStatus)}
-                  onDelete={()=>handleDelete(request.$id)}
-                  onSubmitStatus={(newStatus)=>handleStatusSubmit(request, newStatus)}
-                ></FarmerReqCard>
-            ))}
+        <div className="min-h-screen w-full bg-[#b0dcb9] flex items-start py-20 px-4 align-middle">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                {requests.map((request, index)=>(
+                    <FarmerReqCard
+                      key={request.$id || index}
+                      cropName={request.cropName}
+                      imageUrl={request.imageUrl}
+                      quantity={request.quantity}
+                      status={request.status}
+                      //   onStatusChange={(newStatus)=> updateRequestStatus(request. $id, newStatus)}
+                      onDelete={()=>handleDelete(request.$id)}
+                      onSubmitStatus={(newStatus)=>handleStatusSubmit(request, newStatus)}
+                    ></FarmerReqCard>
+                ))}
+            </div>
         </div>
     )
 }
