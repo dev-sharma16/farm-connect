@@ -141,22 +141,22 @@ export default function contactFarmer(){
 
         try{
           // TODO: tempriarly disabled the message service for testing
-          // const response = await fetch("./api/send-sms",{
-          //   method: 'POST',
-          //   headers: {
-          //     "Content-Type" : "application/json"
-          //   },
-          //   body:JSON.stringify(payload),
-          // });
+          const response = await fetch("./api/send-sms",{
+            method: 'POST',
+            headers: {
+              "Content-Type" : "application/json"
+            },
+            body:JSON.stringify(payload),
+          });
 
-          // const result  = await response.json();
-          // if (response.ok){
-          //   alert("Request sent successfully..!, wait for farmer response");
-          //   reset();
-          //   router.push("/dashboard-consumer");
-          // }else{
-          //   alert(`Failed to submit request..!, try again later ${result.message}`);
-          // }
+          const result  = await response.json();
+          if (response.ok){
+            alert("Request sent successfully..!, wait for farmer response");
+            reset();
+            router.push("/dashboard-consumer");
+          }else{
+            alert(`Failed to submit request..!, try again later ${result.message}`);
+          }
         }catch(error: any){
           console.error("Error sending SMS:", error);
           alert("Something went wrong!");

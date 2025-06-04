@@ -63,29 +63,29 @@ export default function requestFarmer(){
                         farmerName: clickedRequest.farmerName,  
                     }
                 // TODO: temperarily disabled the messaging service for testing purpose
-                    // try {
+                    try {
 
-                    //     const response = await fetch("/api/send-sms-consumer", {
-                    //         method: 'POST',
-                    //         headers: {
-                    //             "Content-Type" : "application/json"
-                    //         },
-                    //         body: JSON.stringify(payload),
-                    //     });
+                        const response = await fetch("/api/send-sms-consumer", {
+                            method: 'POST',
+                            headers: {
+                                "Content-Type" : "application/json"
+                            },
+                            body: JSON.stringify(payload),
+                        });
                     
-                    //     const result = await response.json();
-                    //     if(response.ok){
-                    //         console.log("Status updated and SMS sent successfully");
-                    //         alert("Request status updated and customer notified!");
-                    //     }else{
-                    //         console.error("SMS sending failed:", result);
-                    //         alert("Status updated but failed to notify customer via SMS");
-                    //     }
+                        const result = await response.json();
+                        if(response.ok){
+                            console.log("Status updated and SMS sent successfully");
+                            alert("Request status updated and customer notified!");
+                        }else{
+                            console.error("SMS sending failed:", result);
+                            alert("Status updated but failed to notify customer via SMS");
+                        }
                     
-                    // } catch (error: any) {
-                    //     console.log("Error in sending payload to route : ", error);
+                    } catch (error: any) {
+                        console.log("Error in sending payload to route : ", error);
 
-                    // }
+                    }
                 } else {
                     alert("Status updated but failed to get request details for SMS");
                 }
