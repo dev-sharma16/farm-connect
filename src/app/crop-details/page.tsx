@@ -3,12 +3,22 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { crudService } from "@/appwrite/crudService";
 
+interface Post {
+  $id: string;
+  name: string;
+  price: number;
+  availability: number;
+  postImageUrl: string;
+  userName: string;
+  city: string;
+  state: string;
+}
+
 export default function CropDetailPage() {
   const searchParams = useSearchParams();
   const postId = searchParams.get("postId");
 
-  const [post, setPost] = useState(null);
-
+  const [post, setPost] = useState<Post | null>(null);
   const router = useRouter();
 
   useEffect(() => {
