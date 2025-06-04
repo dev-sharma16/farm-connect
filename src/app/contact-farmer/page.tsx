@@ -29,7 +29,6 @@ export default function ContactFarmer(){
 
     const [loading, setLoading] = useState(false);
     const [availableCities, setAvailableCities] = useState<string[]>([]);
-    const [post, setPost] = useState([]);
     const [farmerDetails, setFarmerDetails] = useState<{
       cropName : string,
       farmerName : string,
@@ -87,7 +86,7 @@ export default function ContactFarmer(){
 
       fetchPostAndFarmerDetails();
 
-    },[])
+    },[postId])
 
     const onSubmit = async (data: FormData) => {
       try {
