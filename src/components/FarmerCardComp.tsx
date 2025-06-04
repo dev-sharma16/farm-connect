@@ -52,7 +52,7 @@ export default function FarmerCard({
               <span className="font-semibold">Price:</span> ₹{price}
             </p>
             <p>
-              <span className="font-semibold">Quanty:</span> {availability}
+              <span className="font-semibold">Quantity:</span> {availability}kg
             </p>
           </div>
     

@@ -61,7 +61,7 @@ export default function CropDetailPage() {
                   </div>
                 </div>
       
-                {/* Dummy Contact Button */}
+                {/* Contact Button */}
                 <button
                   className="bg-green-700 hover:bg-green-800 text-white py-3 rounded-xl text-center text-lg font-medium transition-all duration-200"
                   onClick={()=> router.push(`/contact-farmer?postId=${post.$id}`)}

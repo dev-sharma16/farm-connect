@@ -67,19 +67,20 @@ export default function requestConsumer(){
     }
 
     return(
-        <div className="min-h-[calc(100vh-64px)] w-full bg-[#b0dcb9] flex items-start py-20">
-            {requests.map((request, index)=>(
-                <ConsumerReqCard
-                  key = {request.$id || index}
-                  cropName={request.cropName}
-                  imageUrl={request.imageUrl}
-                  quantity={request.quantity}
-                  farmerName={request.farmerName}
-                  status={request.status}
-                  onDelete={()=> handleDelete(request.$id)}
-                ></ConsumerReqCard>
-
-            ))}
+        <div className="min-h-screen w-full bg-[#b0dcb9] flex items-start py-20 px-4 align-middle">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                {requests.map((request, index)=>(
+                    <ConsumerReqCard
+                      key = {request.$id || index}
+                      cropName={request.cropName}
+                      imageUrl={request.imageUrl}
+                      quantity={request.quantity}
+                      farmerName={request.farmerName}
+                      status={request.status}
+                      onDelete={()=> handleDelete(request.$id)}
+                    ></ConsumerReqCard>
+                ))}
+            </div>
         </div>
     )
 } 
