@@ -17,7 +17,7 @@ type FormData = {
 }
 
 
-export default function addCrop(){
+export default function AddCrop(){
     const {
         register,
         handleSubmit,

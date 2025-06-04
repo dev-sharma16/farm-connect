@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { appwrite } from "@/appwrite/appwrite";
 
 
-export default function requestConsumer(){
+export default function RequestConsumer(){
 
     const [requests, setRequests] = useState([]);
     const [loading, setLoading] = useState(false);

@@ -7,7 +7,7 @@ import ConsumerCardComp from "@/components/ConsumerCardComp";
 import { STATES_AND_CITIES } from "@/constants/locationData"
 
 
-export default function dashboardConsumer(){
+export default function DashboardConsumer(){
 
     const [loading, setLoading] = useState(false);
     const [posts, setPosts] = useState([]);

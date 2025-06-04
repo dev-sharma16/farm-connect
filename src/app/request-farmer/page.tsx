@@ -6,7 +6,7 @@ import FarmerReqCard from "@/components/FarmerReqCard";
 import { request } from "http";
 import { useEffect, useState } from "react";
 
-export default function requestFarmer(){
+export default function RequestFarmer(){
     
     const [requests, setRequests] = useState([]);
     const [loading, setLoading] = useState(false);

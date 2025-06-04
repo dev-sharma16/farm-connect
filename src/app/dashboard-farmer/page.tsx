@@ -20,7 +20,7 @@ import { useRouter } from "next/navigation";
 //      [key: string]: any;
 // }
 
-export default function dashboardFarmer(){
+export default function DashboardFarmer(){
     
     // const [posts, setPosts] = useState<CropPost[]>([]);
     

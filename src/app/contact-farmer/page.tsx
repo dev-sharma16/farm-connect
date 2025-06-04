@@ -17,7 +17,7 @@ type FormData = {
   city: string,
 }
 
-export default function contactFarmer(){
+export default function ContactFarmer(){
     const {
       register,
       handleSubmit,
