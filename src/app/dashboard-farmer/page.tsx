@@ -25,7 +25,6 @@ export default function DashboardFarmer(){
     // const [posts, setPosts] = useState<CropPost[]>([]);
     
     const [posts, setPosts] = useState([]);
-    const [userId, setUserId] = useState('');
     const [loading, setLoading] = useState(true);
     const router = useRouter();
 
